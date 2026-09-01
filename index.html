@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Barbearia Noble — Estilo. Tradição. Atitude.</title>
+  <meta name="description" content="Barbearia Noble: cortes clássicos, barba, pigmentação e estilo. Agende seu horário e viva a experiência da barbearia tradicional com toque moderno.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Barbearia Noble">
+  <meta property="og:description" content="Estilo. Tradição. Atitude. Cortes masculinos e barba em ambiente premium.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1200">
+  <meta property="og:type" content="website">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Header / Navbar -->
+  <header class="header">
+    <nav class="nav container">
+      <a href="#" class="nav-logo">
+        <i class="fa-solid fa-scissors"></i>
+        BARBEARIA <span>NOBLE</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#servicos">Serviços</a></li>
+        <li><a href="#galeria">Galeria</a></li>
+        <li><a href="#video">Vídeo</a></li>
+        <li><a href="#equipe">Equipe</a></li>
+        <li><a href="#contato">Contato</a></li>
+        <li><a href="https://wa.me/5511999999999?text=Quero%20agendar%20um%20horário" class="btn-agendar" target="_blank" rel="noopener">Agendar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="hero-overlay"></div>
+    <div class="hero-content container">
+      <h1 class="hero-title">ESTILO. TRADIÇÃO. ATITUDE.</h1>
+      <p class="hero-subtitle">A barbearia onde o clássico encontra o moderno. Cortes precisos, ambiente premium e a experiência que você merece.</p>
+      <a href="https://wa.me/5511999999999?text=Quero%20agendar%20um%20horário" class="btn btn-primary" target="_blank" rel="noopener">
+        <i class="fa-brands fa-whatsapp"></i> Agendar agora
+      </a>
+    </div>
+  </section>
+
+  <!-- Serviços -->
+  <section class="section servicos" id="servicos">
+    <div class="container">
+      <h2 class="section-title">Nossos Serviços</h2>
+      <p class="section-subtitle">Cada corte é uma obra de arte. Cada visita, uma experiência.</p>
+
+      <div class="servicos-grid">
+        <div class="servico-card">
+          <i class="fa-solid fa-scissors"></i>
+          <h3>Corte Clássico</h3>
+          <p>Tesoura, máquina e acabamento na toalha quente.</p>
+          <span class="preco">R$ 50</span>
+        </div>
+        <div class="servico-card">
+          <i class="fa-solid fa-razor"></i>
+          <h3>Barba</h3>
+          <p>Modelagem com navalha, toalha quente e hidratação.</p>
+          <span class="preco">R$ 40</span>
+        </div>
+        <div class="servico-card">
+          <i class="fa-solid fa-eye"></i>
+          <h3>Sobrancelha</h3>
+          <p>Design masculino com pinça e navalha.</p>
+          <span class="preco">R$ 25</span>
+        </div>
+        <div class="servico-card">
+          <i class="fa-solid fa-paintbrush"></i>
+          <h3>Pigmentação</h3>
+          <p>Cobertura de fios brancos e disfarce de falhas.</p>
+          <span class="preco">R$ 80</span>
+        </div>
+        <div class="servico-card">
+          <i class="fa-solid fa-child"></i>
+          <h3>Corte Infantil</h3>
+          <p>Até 10 anos, com paciência e carinho.</p>
+          <span class="preco">R$ 45</span>
+        </div>
+        <div class="servico-card">
+          <i class="fa-solid fa-star"></i>
+          <h3>Platinado</h3>
+          <p>Descoloração global e tratamento premium.</p>
+          <span class="preco">R$ 180</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Galeria / Carrossel -->
+  <section class="section galeria" id="galeria">
+    <div class="container">
+      <h2 class="section-title">Nossa Galeria</h2>
+      <p class="section-subtitle">Veja alguns dos nossos trabalhos e o ambiente da casa.</p>
+
+      <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=1200&q=80" alt="Corte de cabelo masculino">
+          </div>
+          <div class="swiper-slide">
+            <img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=1200&q=80" alt="Aparar barba">
+          </div>
+          <div class="swiper-slide">
+            <img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=1200&q=80" alt="Instrumentos de barbearia">
+          </div>
+          <div class="swiper-slide">
+            <img src="https://images.unsplash.com/photo-1585747860036-4cb09ba5d8a8?w=1200&q=80" alt="Cadeira vintage de barbearia">
+          </div>
+          <div class="swiper-slide">
+            <img src="https://images.unsplash.com/photo-1635273051937-cb0b9d96d302?w=1200&q=80" alt="Corte moderno">
+          </div>
+          <div class="swiper-slide">
+            <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=1200&q=80" alt="Ambiente interno da barbearia">
+          </div>
+          <div class="swiper-slide">
+            <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1200&q=80" alt="Barbearia clássica">
+          </div>
+          <div class="swiper-slide">
+            <img src="https://images.unsplash.com/photo-1593702295094-aea0fd0e9b7c?w=1200&q=80" alt="Atendimento ao cliente">
+          </div>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Vídeo -->
+  <section class="section video-section" id="video">
+    <div class="container">
+      <h2 class="section-title">Veja em Ação</h2>
+      <p class="section-subtitle">Um pouco do dia a dia na Barbearia Noble.</p>
+
+      <div class="video-wrapper">
+        <iframe
+          src="https://www.youtube.com/embed/5qap5aO4i9A?autoplay=0&mute=1"
+          title="Vídeo da Barbearia Noble"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- Equipe -->
+  <section class="section equipe" id="equipe">
+    <div class="container">
+      <h2 class="section-title">Nossa Equipe</h2>
+      <p class="section-subtitle">Profissionais apaixonados pelo ofício.</p>
+
+      <div class="equipe-grid">
+        <div class="membro">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80" alt="Membro da equipe">
+          <h3>Rafael Noble</h3>
+          <span>Fundador & Master Barber</span>
+        </div>
+        <div class="membro">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80" alt="Membro da equipe">
+          <h3>Diego Castro</h3>
+          <span>Barbeiro Sênior</span>
+        </div>
+        <div class="membro">
+          <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80" alt="Membro da equipe">
+          <h3>Lucas Viana</h3>
+          <span>Especialista em Platinado</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Depoimentos -->
+  <section class="section depoimentos">
+    <div class="container">
+      <h2 class="section-title">O que dizem nossos clientes</h2>
+
+      <div class="depoimentos-grid">
+        <blockquote class="depoimento">
+          <p>"Melhor barbearia da região. Ambiente, atendimento e corte impecáveis. Não troco por nada."</p>
+          <footer>— Carlos M.</footer>
+        </blockquote>
+        <blockquote class="depoimento">
+          <p>"O Rafael entende exatamente o que eu quero. Saio sempre com o corte perfeito."</p>
+          <footer>— André S.</footer>
+        </blockquote>
+        <blockquote class="depoimento">
+          <p>"Atendimento nota 10. Lugar lindo, climatizado e com aquele café enquanto você espera."</p>
+          <footer>— Felipe R.</footer>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contato -->
+  <section class="section contato" id="contato">
+    <div class="container">
+      <h2 class="section-title">Onde Estamos</h2>
+
+      <div class="contato-grid">
+        <div class="contato-info">
+          <div class="info-item">
+            <i class="fa-solid fa-location-dot"></i>
+            <div>
+              <h4>Endereço</h4>
+              <p>Rua das Tesouras, 123 — Centro<br>São Paulo / SP</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fa-solid fa-phone"></i>
+            <div>
+              <h4>Telefone / WhatsApp</h4>
+              <p>(11) 99999-9999</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fa-solid fa-clock"></i>
+            <div>
+              <h4>Horário</h4>
+              <p>Ter–Sex: 09h–20h<br>Sáb: 09h–18h</p>
+            </div>
+          </div>
+          <a href="https://wa.me/5511999999999?text=Quero%20agendar%20um%20horário" class="btn btn-primary" target="_blank" rel="noopener">
+            <i class="fa-brands fa-whatsapp"></i> Falar no WhatsApp
+          </a>
+        </div>
+
+        <div class="mapa">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.0297157454!2d-46.6389!3d-23.5614!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDMzJzQwLjAiUyA0NsKwMzgnMjAuMCJX!5e0!3m2!1spt-BR!2sbr!4v1700000000000"
+            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade" title="Localização da Barbearia Noble">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 Barbearia Noble — Todos os direitos reservados.</p>
+      <div class="social">
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+        <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WhatsApp FAB -->
+  <a href="https://wa.me/5511999999999?text=Quero%20agendar%20um%20horário" class="whatsapp-fab" target="_blank" rel="noopener" aria-label="WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <!-- Custom JS -->
+  <script src="js/script.js"></script>
+</body>
+</html>
