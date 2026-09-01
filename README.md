@@ -4,9 +4,7 @@ Landing page responsiva para a Barbearia Noble, com carrossel de imagens, vídeo
 
 ## 🔗 Link do Deploy
 
-**[https://matheus-mendes.github.io/senai/](https://matheus-mendes.github.io/senai/)**
-
-*(Aguardar ~2 minutos após o push para o GitHub Pages propagar.)*
+**[https://matheusmendes720.github.io/senai/](https://matheusmendes720.github.io/senai/)**
 
 ## ✨ Recursos
 
