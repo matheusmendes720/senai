@@ -10,7 +10,7 @@ import os
 import shutil
 import sys
 from pathlib import Path
-from typing import Optional
+from typing import Optional, cast
 
 from textual.app import App, ComposeResult
 from textual.binding import Binding
@@ -27,7 +27,7 @@ from textual.widgets import (
     RichLog,
     Static,
 )
-from textual import on
+from textual import events, on
 
 from avaliacao_tui.exercicios import (
     EXERCICIOS, EXERCICIOS_DIR, BIN_DIR, exe_path, script_path,
@@ -77,6 +77,73 @@ class ExerciseItem(ListItem):
     def __init__(self, num: str, nome: str) -> None:
         super().__init__(Label(f"  [{num}]  {nome}"))
         self.num = num
+
+
+# ---------- Atalhos do painel ----------
+
+#: Teclas que o painel trata como atalho no modo navegação.
+SHORTCUT_KEYS = frozenset("q r n p 0 1 2 3 4 5 6 7 8 9".split())
+
+#: Caracteres correspondentes às teclas de atalho de um só carácter.
+SHORTCUT_CHARS = frozenset(key for key in SHORTCUT_KEYS if len(key) == 1)
+
+
+class StdinInput(Input):
+    """Campo de stdin que não engole os atalhos do ecrã.
+
+    O `Input` do Textual captura todas as teclas imprimíveis
+    (`event.stop()` em `Input._on_key`) e, por isso, as teclas `r`/`n`/`p`/
+    `0-9`/`q` nunca chegavam ao `Screen` — o `Screen` é que tem as `BINDINGS`
+    do painel. Com o campo focado, `r` virava texto no campo em vez de
+    arrancar o exercício.
+
+    Aqui o campo tem dois modos, alternados com `Tab`:
+
+    - **navegação** (default): as teclas de atalho não são escritas no campo
+      e sobem até ao `Screen`, que as executa como atalhos;
+    - **escrita**: todas as teclas imprimíveis vão para o `stdin` do programa
+      (é o que o exercício 06 — "s/n" — e o 10 — senha — precisam).
+    """
+
+    def _painel(self) -> "MainScreen":
+        return cast("MainScreen", self.screen)
+
+    def _em_navegacao(self) -> bool:
+        return not bool(getattr(self.screen, "typing_mode", False))
+
+    def check_consume_key(self, key: str, character: str | None) -> bool:
+        # Em modo navegação o `Screen` precisa destas teclas no seu binding
+        # chain: se o `Input` as captura, o `Screen` nunca chega a vê-las.
+        if self._em_navegacao() and key in SHORTCUT_KEYS:
+            return False
+        return super().check_consume_key(key, character)
+
+    async def _on_key(self, event: events.Key) -> None:
+        if event.key == "tab":
+            # Tab alterna entre navegação e escrita.
+            event.prevent_default()
+            event.stop()
+            self._painel().action_toggle_typing()
+            return
+        if (
+            self._em_navegacao()
+            and event.is_printable
+            and event.character is not None
+            and event.character in SHORTCUT_CHARS
+        ):
+            # Não escreve no campo: deixa a tecla subir até ao `Screen`.
+            event.prevent_default()
+            return
+        await super()._on_key(event)
+
+    def on_blur(self, event: events.Blur) -> None:
+        # O modo escrita só faz sentido com o campo focado — se o foco sai
+        # daqui (o programa acabou, o professor trocou de exercício), volta
+        # ao modo navegação para as teclas voltarem a ser atalhos.
+        painel = self._painel()
+        if painel.typing_mode:
+            painel.typing_mode = False
+            painel._refresh_status()
 
 
 # ---------- App principal ----------
@@ -144,7 +211,8 @@ class MainScreen(Screen):
     """
 
     BINDINGS = [
-        Binding("q", "quit", "Sair", priority=True),
+        Binding("q", "app.quit", "Sair"),
+        Binding("tab", "toggle_typing", "Escrever"),
         Binding("r", "run", "Rodar"),
         Binding("enter", "run", show=False),
         Binding("n", "next_ex", "Próximo ▶"),
@@ -163,6 +231,8 @@ class MainScreen(Screen):
     ]
 
     current_index: reactive[int] = reactive(0)
+    typing_mode: reactive[bool] = reactive(False)
+    """False = navegação (as teclas são atalhos); True = escrita (vão para o stdin)."""
     proc: Optional[asyncio.subprocess.Process] = None
     reader_task: Optional[asyncio.Task] = None
     compiler: Optional[tuple[str, str]] = None
@@ -180,7 +250,7 @@ class MainScreen(Screen):
                 yield Static("", id="description")
                 yield Static("", id="status")
                 yield RichLog(id="output", highlight=True, markup=True, wrap=True)
-                yield Input(placeholder="Entrada para o programa… (Enter envia)", id="stdin")  # placeholder inicial; é atualizado em _refresh_description
+                yield StdinInput(placeholder="Entrada para o programa… (Enter envia)", id="stdin")  # placeholder inicial; é atualizado em _refresh_description
         yield Footer()
 
     def on_mount(self) -> None:
@@ -232,19 +302,42 @@ class MainScreen(Screen):
     def _refresh_status(self) -> None:
         if self.compiler:
             label, path = self.compiler
-            txt = f"[dim]compilador:[/dim] [green]{label}[/green] [dim]({path})[/dim]"
+            comp = f"[dim]compilador:[/dim] [green]{label}[/green] [dim]({path})[/dim]"
         else:
-            txt = (
+            comp = (
                 "[bold red]Nenhum compilador C encontrado —[/bold red] "
                 "instale gcc (MinGW/MSYS2) ou rode "
                 "[cyan]scoop install tcc[/cyan]"
             )
-        self.status.update(txt)
+        if self.typing_mode:
+            modo = (
+                "[bold cyan]modo escrita[/bold cyan] [dim]"
+                "(Tab → navegação; as teclas vão para o stdin do programa)[/dim]"
+            )
+        else:
+            modo = (
+                "[bold cyan]modo navegação[/bold cyan] [dim]"
+                "(Tab → escrita; r/n/p/0-9/q são atalhos)[/dim]"
+            )
+        self.status.update(f"{modo}  ·  {comp}")
 
     # ---------- actions ----------
 
     def action_run(self) -> None:
         asyncio.create_task(self._run_selected())
+
+    def action_toggle_typing(self) -> None:
+        """Alterna entre o modo navegação (atalhos) e o modo escrita (stdin).
+
+        O modo escrita é o único em que as teclas digitáveis chegam ao
+        programa — o exercício 06 pede "s/n" e o 10 pede a senha.
+        """
+        self.typing_mode = not self.typing_mode
+        if self.typing_mode:
+            self.stdin_widget.focus()
+        else:
+            self.list_view.focus()
+        self._refresh_status()
 
     async def action_next_ex(self) -> None:
         await self._stop_proc()
@@ -279,6 +372,20 @@ class MainScreen(Screen):
 
     # ---------- compilação + execução ----------
 
+    def _env_filho(self) -> dict[str, str]:
+        """Ambiente para o compilador e para o programa filho.
+
+        O toolchain do MSYS2/TDM no Windows só funciona com o próprio
+        diretório no PATH: as DLLs dele (libgcc, libwinpthread) moram lá.
+        Sem isto o gcc morre com "código 1" e stderr vazio.
+        """
+        env = dict(os.environ)
+        if self.compiler:
+            compiler_dir = str(Path(self.compiler[1]).parent)
+            env["PATH"] = compiler_dir + os.pathsep + env.get("PATH", "")
+        env["PYTHONIOENCODING"] = "utf-8"
+        return env
+
     async def _compile(self, ex) -> Optional[Path]:
         src = script_path(ex.num)
         dst = exe_path(ex.num)
@@ -300,6 +407,7 @@ class MainScreen(Screen):
                 compiler_path, str(src), "-o", str(dst),
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
+                env=self._env_filho(),
             )
             _, err = await proc.communicate()
         except FileNotFoundError as e:
@@ -337,7 +445,7 @@ class MainScreen(Screen):
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.STDOUT,
                 cwd=str(EXERCICIOS_DIR),
-                env={**os.environ, "PYTHONIOENCODING": "utf-8"},
+                env=self._env_filho(),
             )
         except Exception as e:
             self.output.write(f"[bold red]Falha ao iniciar o .exe:[/bold red] {e}")
@@ -402,6 +510,10 @@ class MainScreen(Screen):
         self.stdin_widget.value = ""
         # Sem processo rodando: avisa o usuário em vez de engolir o input
         if not (self.proc and self.proc.stdin and self.proc.returncode is None):
+            if not self.typing_mode:
+                # Enter em modo navegação = rodar o exercício (mesmo que "r").
+                await self._run_selected()
+                return
             ex = self._ex_at(self.current_index)
             self.output.write(
                 f"[bold blue]›[/bold blue] {value}  "

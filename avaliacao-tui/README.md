@@ -64,8 +64,12 @@ mudou, o `.exe` é reusado.
 
 ## Atalhos da TUI
 
+O painel tem **dois modos**, alternados com `Tab`. O modo ativo aparece na
+barra de estado (a linha por baixo da lista).
+
 | Tecla | Ação |
 |---|---|
+| `Tab` | Alterna entre **modo navegação** e **modo escrita** |
 | `↑` / `↓` | Navega entre os exercícios |
 | `1`–`9` | Pula direto para o exercício 01–09 |
 | `0` | Pula para o exercício 10 |
@@ -73,11 +77,26 @@ mudou, o `.exe` é reusado.
 | `n` | Próximo exercício (roda automaticamente) |
 | `p` | Exercício anterior (roda automaticamente) |
 | `Esc` | Interrompe o programa em execução |
-| `q` / `Ctrl+C` | Sai da TUI |
+| `q` | Sai da TUI (no modo navegação) |
+| `Ctrl+Q` | Sai da TUI (a qualquer momento) |
 | Click do mouse | Seleciona item da lista |
 
-A área de output mostra a saída do programa em tempo real. O campo de input
-na parte inferior envia dados ao `stdin` (digite e pressione `Enter`).
+### Modo navegação (default)
+
+As teclas acima funcionam como atalhos **mesmo com o cursor dentro do campo
+de input** — é o modo em que o professor fica enquanto o programa corre.
+O `Input` do Textual consome as teclas imprimíveis, por isso o campo é um
+`StdinInput`: em modo navegação ele deixa as teclas de atalho subirem até ao
+ecrã em vez de as escrever no campo.
+
+### Modo escrita
+
+Com `Tab`, o campo de input passa a receber tudo o que se escreve: as teclas
+vão para o `stdin` do programa (é o que o exercício 06 — "s/n" — e o 10 — a
+senha — precisam). `Enter` envia a linha para o programa; `Tab` volta ao modo
+navegação.
+
+A área de output mostra a saída do programa em tempo real.
 
 ## Como substituir uma solução
 
