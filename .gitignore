@@ -2,3 +2,8 @@
 Controle-de-Estoque-em-Java/
 CorteCerto/
 workconnect-tcc/
+
+# Estado de runtime de ferramentas externas (ledger de receipts, config gerado)
+.claude-flow/
+.claude/proven-config.json
+.claude/.proven-config-version
