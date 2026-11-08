@@ -469,10 +469,30 @@ class MainScreen(Screen):
         except Exception as e:
             self.output.write(f"[red]Erro de leitura: {e}[/red]")
         finally:
+            rc = -1
             try:
-                rc = await self.proc.wait()
+                # Espera limitada: um programa à espera de input no stdin nunca
+                # termina sozinho. Sem este limite, o `wait()` ficava pendurado
+                # e o `App` não fechava quando o utilizador carregava em "q"
+                # com um exercício a correr.
+                rc = await asyncio.wait_for(self.proc.wait(), timeout=0.5)
+            except (asyncio.TimeoutError, asyncio.CancelledError):
+                rc = -1
             except Exception:
                 rc = -1
+            if rc == -1 and self.proc.returncode is None:
+                # O programa ficou à espera de input e o `App` está a fechar:
+                # terminá-lo para não deixar um processo órfão pelo caminho.
+                try:
+                    self.proc.terminate()
+                except Exception:
+                    pass
+            try:
+                # Fecha os pipes do filho: sem isto o asyncio reclama
+                # "unclosed transport" quando o interpreter termina.
+                self.proc._transport.close()
+            except Exception:
+                pass
             cor = "green" if rc == 0 else "red"
             self.output.write(f"\n[bold {cor}]■ Programa finalizado (código {rc})[/bold {cor}]")
             self.proc = None
