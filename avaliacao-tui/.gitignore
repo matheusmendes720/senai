@@ -40,3 +40,6 @@ Thumbs.db
 
 # Secrets
 .env
+
+# Binários compilados (gerados em runtime pelo painel)
+src/avaliacao_tui/exercicios/bin/
